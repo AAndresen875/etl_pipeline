@@ -14,4 +14,41 @@ read the gdal docs [here](https://pypi.org/project/GDAL/). I am not sure how to 
 * did not work, I am going to try and install the repo locally so I can run the requirements.txt in my conda environment
 ALSO did not work.
 
-1/21/2024: going to pause on this api and come back to it when I have a specific use.
+Tried:
+* `sudo apt install libgdal-dev`
+* `pip install GDAL=="$(gdal-config --version).*"`
+* then did: `pip install GDAL` but it said that was already satisfied.
+* reran: `pip install natcap.invest` got the following error:
+```
+Successfully built natcap.invest pygeoprocessing
+Failed to build GDAL
+ERROR: Could not build wheels for GDAL, which is required to install pyproject.toml-based projects
+```
+
+Going to try and see if I can pip install the requirements.txt file that is in the github repo for invest:
+
+* did not work, got the error message:
+```
+      error: command '/usr/bin/gcc' failed with exit code 1
+      [end of output]
+
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+  ERROR: Failed building wheel for GDAL
+  Running setup.py clean for GDAL
+Failed to build GDAL
+ERROR: Could not build wheels for GDAL, which is required to install pyproject.toml-based projects
+```
+Tried to read other source docs which suggested: pip install natcap.invest --upgrade-strategy=only-if-needed
+got the same error:
+```
+      error: command '/usr/bin/gcc' failed with exit code 1
+      [end of output]
+
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+  ERROR: Failed building wheel for GDAL
+  Running setup.py clean for GDAL
+Failed to build GDAL
+ERROR: Could not build wheels for GDAL, which is required to install pyproject.toml-based projects
+```
+
+pausing, will come back to at a later date:
