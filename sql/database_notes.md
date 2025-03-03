@@ -173,3 +173,21 @@ ALTER TABLE field_boundaries ADD COLUMN created_at TIMESTAMP DEFAULT CURRENT_TIM
 ALTER TABLE field_boundaries ADD COLUMN updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 ```
 15. recording the table's upscripts in the file `sql/upscripts.sql`
+16. Create a username and password for the database so you can connect with SQL alchemy
+    * logged into the postgres user: `sudo -i -u postgres`
+    * created role for sql alchemy [link](https://www.postgresql.org/docs/current/sql-createrole.html)
+    ```
+    postgres=# CREATE USER <username> WITH PASSWORD '<password>';
+    postgres=# \du
+                                    List of roles
+    Role name |                         Attributes                         | Member of
+    -----------+------------------------------------------------------------+-----------
+    <username>  |                                                         | {}
+    postgres  | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
+    ```
+    * connected to field_mrv `postgres=# \c field_mrv`
+    output: `You are now connected to database "field_mrv" as user "postgres".`
+    * granted permissions with 
+        * `GRANT pg_read_all_data TO my_user;`
+        * `GRANT pg_write_all_data TO my_user;`
+17. Inserted some sample data: see insert.sql

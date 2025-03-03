@@ -29,3 +29,19 @@ reactivate the environment via:
 `conda activate your-enviro-name`
 
 now when wanting to pass this credential into your script, you can call it via: `os.environ['OPEN_TOPO_API_KEY']`
+
+## example of some data for the call:
+""" 
+that covers a small area in the Czech Republic, specifically around the city of Prague. T
+he approximate central point of this bounding box is at latitude 50.05 and longitude 14.475.
+
+This central point is located in the vicinity of Prague, the capital city of the Czech Republic. 
+An approximate address for this location would be:
+Prague, Czech Republic
+"""
+
+Sample data for prague:
+south_number = "-70" # Southern boundary at latitude 50.0 degrees
+north_number = "-5.1" # Northern boundary at latitude 50.1 degrees.
+west_number = "-34.35" # Western boundary at longitude 14.35 degrees.
+east_number = "-74.6" # Eastern boundary at longitude 14.6 degrees.
