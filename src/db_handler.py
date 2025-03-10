@@ -12,7 +12,34 @@ from typing import List, Any
 
 class DatabaseHandler:
     """
-    A class to handle database operations using SQLAlchemy.
+    This class provides methods to interact with a database using SQLAlchemy.
+    this includes retrieving table names, column information, table data,
+    and executing custom SQL queries.
+    It also supports operations with GeoDataFrames for spatial data.
+    Attributes:
+    ----------
+    engine : sqlalchemy.engine.Engine
+        The SQLAlchemy engine object used to connect to the database.
+    connection : sqlalchemy.engine.Connection
+        The active connection to the database.
+    metadata : sqlalchemy.MetaData
+        The metadata object that holds information about the database schema.
+    Methods:
+    -------
+    __init__(db_url: str)
+    get_table_names() -> List[str]
+    get_column_info_dataframe(table_name: str) -> pd.DataFrame
+    get_table(table_name: str) -> sqlalchemy.Table
+    get_table_data(table_name: str) -> pd.DataFrame
+        Get the data of a specific table as a pandas DataFrame.
+    execute_custom_sql(statement: str) -> List[Any]
+        Execute a custom SQL statement and return the results.
+    execute_custom_geo_sql(statement: str) -> gpd.GeoDataFrame
+        Execute a custom SQL statement and return the results as a GeoDataFrame.
+    get_geo_table_data(table_name: str, geom_col: str = None, where_clause: str = None) -> gpd.GeoDataFrame
+        Get the data of a specific table as a GeoDataFrame.
+    close_connection() -> None
+
     """
 
     def __init__(self, db_url: str):
@@ -95,23 +122,19 @@ class DatabaseHandler:
         :return: The results of the query
         """
         try:
-            result = self.connection.execute(text(statement))
-            return result.fetchall()
+            # using We use self.engine.begin() to create a transaction context.
+            # This ensures that the transaction is automatically committed if no
+            # exceptions occur, or rolled back if an exception is raised.
+            with self.engine.begin() as connection:
+                result = connection.execute(text(statement))
+                # If the statement is a SELECT, fetch and return the results
+                if statement.strip().lower().startswith("select"):
+                    return result.fetchall()
+                # For other statements (UPDATE, INSERT, DELETE), return an empty list
+                return []
         except Exception as e:
             print(f"An error occurred: {e}")
             return []
-
-    def execute_custom_geo_sql(self, statement: str) -> gpd.GeoDataFrame:
-        """
-        Execute an SQL statement and return the results as a GeoDataFrame.
-
-        :param statement: The SQL statement to execute
-        :return: The results of the query
-        """
-        # read the query results into a GeoDataFrame
-        gdf = gpd.read_postgis(statement, con=self.engine)
-        # return the GeoDataFrame
-        return gdf
 
     def get_geo_table_data(
         self, table_name: str, geom_col: str = None, where_clause: str = None
