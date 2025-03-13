@@ -130,7 +130,8 @@ class GlobalDEM(OpenTopographyAPI):
         :param east: Eastern boundary at longitude.
             WGS 84 bounding box east coordinates: Example : 14.6
         :param output_format: The format of the output file.
-            Output Format (optional) - GTiff for GeoTiff, AAIGrid for Arc ASCII Grid, HFA for Erdas Imagine (.IMG). Defaults to GTiff if parameter is not provided
+            Output Format (optional) - GTiff for GeoTiff, AAIGrid for Arc ASCII Grid, HFA for Erdas Imagine
+            (.IMG). Defaults to GTiff if parameter is not provided
             Available values : GTiff, AAIGrid, HFA
             Default value : GTiff
             Example : GTiff
