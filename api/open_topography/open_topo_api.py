@@ -1,16 +1,22 @@
+import os
+import requests
+
+
 class OpenTopographyAPI:
     """
     A class to interact with the OpenTopography API.
 
     Attributes:
-        server_url (str): The base URL for the OpenTopography API.
         api_key (str): The API key for authentication.
+        server_url (str, optional): The base URL for the OpenTopography API.
 
     Methods:
         __init__(server_url, api_key): Initializes the OpenTopographyAPI with the given server URL and API key.
     """
 
-    def __init__(self, server_url: str, api_key: str):
+    def __init__(
+        self, api_key: str, server_url: str = "https://portal.opentopography.org/API/"
+    ):
         self.server_url = server_url
         self.api_key = api_key
 
@@ -82,7 +88,19 @@ class OpenTopographyAPI:
 
 
 class GlobalDEM(OpenTopographyAPI):
-    """ """
+    """
+    GlobalDEM is a class for interacting with the GlobalDEM endpoint of the OpenTopography API.
+    This class provides methods to construct request URLs and download data for various global
+    Digital Elevation Models (DEMs). It supports multiple DEM types and allows users to specify
+    geographical boundaries and output formats for the requested data.
+    Attributes:
+        endpoint_code (str): The specific endpoint code for the GlobalDEM API.
+    Methods:
+        construct_request_url(demtype_code, south, north, west, east, output_format):
+            Constructs the request URL for the GlobalDEM endpoint based on the provided parameters.
+        download_data(demtype_code, south, north, west, east, output_format, output_directory):
+            Downloads data from the GlobalDEM endpoint and saves it to the specified directory.
+    """
 
     def __init__(self, server_url: str, api_key: str):
         """
@@ -141,6 +159,26 @@ class GlobalDEM(OpenTopographyAPI):
         # TODO: break into lines
         request_url = f"""{self.server_url}{self.endpoint_code}?demtype={demtype_code}&south={south}&north={north}&west={west}&east={east}&outputFormat={output_format}&API_Key={self.api_key}"""
         return request_url
+
+    def download_data(
+        self,
+        output_directory: str,
+    ) -> str:
+        """
+        Download data from the GlobalDEM endpoint.
+        :param output_directory: The directory to save the downloaded file.
+        :return: The path to the downloaded file.
+        """
+        request_url = self.construct_request_url(
+            self.demtype_code,
+            self.south,
+            self.north,
+            self.west,
+            self.east,
+            self.output_format,
+        )
+        # TODO: make sure this works the right way and see if there are new content-types to add into the parent lass method
+        return super().download_data_from_url(request_url, output_directory)
 
 
 class USGSDem(OpenTopographyAPI):
